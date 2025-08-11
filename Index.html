@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Index</title>
+    <style>
+    #drivers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      list-style: none;
+      padding: 0;
+    }
+
+    #drivers li {
+      border: 1px solid #ccc;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    </style>
+</head>
+<body>
+  <h1>F1 Drivers</h1>
+  <ul id="drivers"></ul>
+    
+  <script>
+    fetch("https://api.openf1.org/v1/drivers?session_key=latest")
+      .then(res => res.json())
+      .then(data => {
+        
+
+        data.sort((a, b) => a.team_name.localeCompare(b.team_name));
+        const list = document.getElementById("drivers");
+
+        data.forEach(driver => {
+        const li = document.createElement("li");
+
+        if (driver.team_colour) {
+            li.style.backgroundColor = `#${driver.team_colour}`;
+        } else {
+            li.style.backgroundColor = '#fff'; // fallback color
+        }
+
+        const container = document.createElement("div");
+        container.style.display = "flex";
+        container.style.alignItems = "center";
+
+        const textSpan = document.createElement("span");
+        textSpan.textContent = `${driver.name_acronym}`;
+        textSpan.style.display = "inline-block";
+        textSpan.style.width = "50px"; // fixed width for all names
+
+        const img = document.createElement("img");
+        img.src = driver.headshot_url;
+        img.alt = driver.full_name;
+        img.style.width = "50px";
+        img.style.marginLeft = "10px";
+
+        container.appendChild(textSpan);
+        container.appendChild(img);
+        li.appendChild(container);
+        list.appendChild(li);
+        
+        });
+      })
+      .catch(err => console.error(err));
+
+  </script>
+</body>
+</html>
+
