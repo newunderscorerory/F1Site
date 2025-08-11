@@ -58,13 +58,19 @@
         container.appendChild(textSpan);
         container.appendChild(img);
         li.appendChild(container);
-        list.appendChild(li);
-        
+
+        li.style.cursor = "pointer";
+        li.addEventListener("click", () => {
+            window.location.href = `driver.html?id=${driver.name_acronym}`;
         });
+
+        list.appendChild(li);  // <--- This was missing
+        });
+
       })
       .catch(err => console.error(err));
 
   </script>
 </body>
 </html>
-
+      

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Driver</title>
+</head>
+<body>
+  <h1>Driver Info</h1>
+  <div id="driver-info"></div>
+    
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name_acronym = params.get('id');
+    fetch(`https://api.openf1.org/v1/drivers?name_acronym=${name_acronym}`)
+      .then(res => res.json())
+      .then(data => {
+        const driver = data[0]; // API returns an array, take first match
+        if (!driver) {
+          document.getElementById('driver-info').textContent = "Driver not found.";
+          return;
+        }
+        const container = document.getElementById('driver-info');
+        const img = document.createElement('img');
+        img.src = driver.headshot_url;
+        img.alt = driver.full_name;
+        img.style.width = '100px';
+
+        const name = document.createElement('h2');
+        name.textContent = driver.full_name;
+
+        const team = document.createElement('p');
+        team.textContent = `Team: ${driver.team_name}`;
+
+        container.appendChild(img);
+        container.appendChild(name);
+        container.appendChild(team);
+      })
+      .catch(err => console.error(err));
+  </script>
+</body>
+</html>
